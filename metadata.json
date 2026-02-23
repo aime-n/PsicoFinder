@@ -1,0 +1,5 @@
+{
+  "name": "PsicoFinder - Doctoralia Scraper",
+  "description": "Find and filter psychologists from Doctoralia with regex support and price sorting.",
+  "requestFramePermissions": []
+}
