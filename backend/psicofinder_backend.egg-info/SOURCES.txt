@@ -1,0 +1,13 @@
+README.md
+pyproject.toml
+app/__init__.py
+app/main.py
+psicofinder_backend.egg-info/PKG-INFO
+psicofinder_backend.egg-info/SOURCES.txt
+psicofinder_backend.egg-info/dependency_links.txt
+psicofinder_backend.egg-info/requires.txt
+psicofinder_backend.egg-info/top_level.txt
+scraper/__init__.py
+scraper/adapters.py
+scraper/pipeline.py
+scraper/run.py

@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "psicofinder-backend"
+version = "0.1.0"
+description = "FastAPI backend, scraper, and migrations for PsicoFinder."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "alembic>=1.16.0",
+  "beautifulsoup4>=4.12.3",
+  "fastapi>=0.115.0",
+  "httpx>=0.28.1",
+  "psycopg[binary]>=3.2.9",
+  "pydantic-settings>=2.8.1",
+  "python-slugify>=8.0.4",
+  "sqlalchemy>=2.0.40",
+  "uvicorn[standard]>=0.34.2",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.5",
+  "pytest-asyncio>=0.26.0",
+  "ruff>=0.11.8",
+]
+
+[tool.uv]
+package = true
+
+[tool.setuptools]
+packages = ["app", "scraper"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
