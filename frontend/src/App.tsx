@@ -2,9 +2,11 @@ import {
   Building2,
   Languages,
   MapPin,
+  Moon,
   RefreshCw,
   Search,
   SlidersHorizontal,
+  SunMedium,
   Video,
 } from 'lucide-react';
 import { FormEvent, ReactElement, useEffect, useState } from 'react';
@@ -227,6 +229,7 @@ const fallbackTherapists: Therapist[] = [
 ];
 
 export default function App() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [query, setQuery] = useState('');
   const [cityQuery, setCityQuery] = useState('');
   const [cities, setCities] = useState<FacetOption[]>([]);
@@ -251,6 +254,11 @@ export default function App() {
   const [specialtyOptions, setSpecialtyOptions] = useState<FacetOption[]>([]);
   const [languageOptions, setLanguageOptions] = useState<FacetOption[]>([]);
   const [specialtyModalTherapist, setSpecialtyModalTherapist] = useState<Therapist | null>(null);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    window.localStorage.setItem('psicofinder-theme', theme);
+  }, [theme]);
 
   useEffect(() => {
     void fetchTherapists(0);
@@ -587,22 +595,34 @@ export default function App() {
           <p className="hero-text">Diretório nacional de terapeutas extraído da Doctoralia.</p>
         </div>
 
-        <div className="top-summary-stats">
-          <div className="summary-stat">
-            <span>Última coleta</span>
-            <strong>
-              {latestScrape?.latest_scraped_at
-                ? new Intl.DateTimeFormat('pt-BR', {
-                    dateStyle: 'medium',
-                    timeStyle: 'short',
-                  }).format(new Date(latestScrape.latest_scraped_at))
-                : 'Pendente'}
-            </strong>
+        <div className="top-summary-actions">
+          <div className="top-summary-stats">
+            <div className="summary-stat">
+              <span>Última coleta</span>
+              <strong>
+                {latestScrape?.latest_scraped_at
+                  ? new Intl.DateTimeFormat('pt-BR', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    }).format(new Date(latestScrape.latest_scraped_at))
+                  : 'Pendente'}
+              </strong>
+            </div>
+            <div className="summary-stat">
+              <span>Total de perfis</span>
+              <strong>{totalProfiles}</strong>
+            </div>
           </div>
-          <div className="summary-stat">
-            <span>Total de perfis</span>
-            <strong>{totalProfiles}</strong>
-          </div>
+
+          <button
+            className="theme-toggle"
+            type="button"
+            onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+            aria-label={theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro'}
+          >
+            {theme === 'dark' ? <SunMedium size={16} /> : <Moon size={16} />}
+            <span>{theme === 'dark' ? 'Modo claro' : 'Modo escuro'}</span>
+          </button>
         </div>
       </section>
 

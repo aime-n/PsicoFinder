@@ -2,10 +2,14 @@ from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
+from pathlib import Path
+import json
 import sys
 
+import httpx
 from slugify import slugify
 from sqlalchemy import select
+from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
@@ -22,16 +26,28 @@ def run_daily_scrape(db: Session) -> dict[str, int]:
     failed = 0
     processed = 0
     total_profiles = 0
+    failure_rows: list[dict[str, str]] = []
 
     for page in range(1, settings.scraper_max_pages + 1):
         print(f"\nFetching listing page {page}/{settings.scraper_max_pages}...")
-        html = scraper.fetch_directory_page(page)
+        try:
+            html = scraper.fetch_directory_page(page)
+        except httpx.HTTPStatusError as exc:
+            status = exc.response.status_code if exc.response is not None else None
+            if status in {404, 405}:
+                print(f"Stopping at page {page}: Doctoralia returned HTTP {status}.")
+                break
+            raise
         batch = scraper.parse_directory_page(html)
         if not batch:
             break
 
         fetched += len(batch)
         total_profiles += len(batch)
+        page_started_created = created
+        page_started_updated = updated
+        page_started_failed = failed
+
         render_progress(
             current=processed,
             total=total_profiles,
@@ -42,22 +58,19 @@ def run_daily_scrape(db: Session) -> dict[str, int]:
             failed=failed,
         )
 
+        enriched_items: list[ScrapedTherapist] = []
         for item, enriched_item, error in enrich_batch(scraper, batch):
-            try:
-                if error is not None or enriched_item is None:
-                    failed += 1
-                    continue
-
-                therapist, was_created = upsert_therapist(db, enriched_item)
-                therapist.last_scraped_at = datetime.now(timezone.utc)
-                if was_created:
-                    created += 1
-                else:
-                    updated += 1
-            except Exception:
+            processed += 1
+            if error is not None or enriched_item is None:
                 failed += 1
-            finally:
-                processed += 1
+                failure_rows.append(
+                    {
+                        "profile_url": item.profile_url,
+                        "source_id": item.source_id,
+                        "full_name": item.full_name,
+                        "error": repr(error) if error is not None else "enrichment_returned_none",
+                    }
+                )
                 render_progress(
                     current=processed,
                     total=total_profiles,
@@ -67,12 +80,33 @@ def run_daily_scrape(db: Session) -> dict[str, int]:
                     updated=updated,
                     failed=failed,
                 )
+                continue
+
+            enriched_items.append(enriched_item)
+            render_progress(
+                current=processed,
+                total=total_profiles,
+                page=page,
+                name=item.full_name,
+                created=created,
+                updated=updated,
+                failed=failed,
+            )
+
+        page_created, page_updated = bulk_upsert_therapists(db, enriched_items)
+        created += page_created
+        updated += page_updated
 
         db.commit()
+        print(
+            f"Page {page} summary: fetched={len(batch)} created={created - page_started_created} "
+            f"updated={updated - page_started_updated} failed={failed - page_started_failed}"
+        )
 
     if total_profiles:
         sys.stdout.write("\n")
         sys.stdout.flush()
+    write_failure_log(failure_rows)
 
     return {
         "fetched": fetched,
@@ -145,6 +179,93 @@ def upsert_therapist(db: Session, item: ScrapedTherapist) -> tuple[Therapist, bo
     )
     db.add(therapist)
     return therapist, True
+
+
+def bulk_upsert_therapists(db: Session, items: list[ScrapedTherapist]) -> tuple[int, int]:
+    if not items:
+        return 0, 0
+
+    source_ids = [item.source_id for item in items]
+    existing_source_ids = set(
+        db.execute(
+            select(Therapist.source_id).where(
+                Therapist.source == items[0].source,
+                Therapist.source_id.in_(source_ids),
+            )
+        ).scalars()
+    )
+
+    rows = []
+    now = datetime.now(timezone.utc)
+    for item in items:
+        slug = slugify(f"{item.full_name}-{item.city or item.source_id}")
+        city_slug = normalize_text(item.city)
+        approach_tags = normalize_token_list(item.approaches)
+        specialty_tags = normalize_token_list(item.specialties)
+        language_tags = normalize_token_list(item.languages)
+        search_text = build_search_text(item)
+        rows.append(
+            {
+                "source": item.source,
+                "source_id": item.source_id,
+                "is_clinic": detect_clinic(item),
+                "profile_url": item.profile_url,
+                "slug": slug,
+                "full_name": item.full_name,
+                "headline": item.headline,
+                "bio": item.bio,
+                "city": item.city,
+                "city_slug": city_slug or None,
+                "state": item.state,
+                "remote_available": item.remote_available,
+                "price_min": item.price_min,
+                "price_max": item.price_max,
+                "approaches": item.approaches or [],
+                "approach_tags": approach_tags,
+                "specialties": item.specialties or [],
+                "specialty_tags": specialty_tags,
+                "languages": item.languages or [],
+                "language_tags": language_tags,
+                "search_text": search_text,
+                "is_active": True,
+                "last_scraped_at": now,
+            }
+        )
+
+    stmt = insert(Therapist).values(rows)
+    update_columns = {
+        "is_clinic": stmt.excluded.is_clinic,
+        "profile_url": stmt.excluded.profile_url,
+        "slug": stmt.excluded.slug,
+        "full_name": stmt.excluded.full_name,
+        "headline": stmt.excluded.headline,
+        "bio": stmt.excluded.bio,
+        "city": stmt.excluded.city,
+        "city_slug": stmt.excluded.city_slug,
+        "state": stmt.excluded.state,
+        "remote_available": stmt.excluded.remote_available,
+        "price_min": stmt.excluded.price_min,
+        "price_max": stmt.excluded.price_max,
+        "approaches": stmt.excluded.approaches,
+        "approach_tags": stmt.excluded.approach_tags,
+        "specialties": stmt.excluded.specialties,
+        "specialty_tags": stmt.excluded.specialty_tags,
+        "languages": stmt.excluded.languages,
+        "language_tags": stmt.excluded.language_tags,
+        "search_text": stmt.excluded.search_text,
+        "is_active": stmt.excluded.is_active,
+        "last_scraped_at": stmt.excluded.last_scraped_at,
+    }
+    db.execute(
+        stmt.on_conflict_do_update(
+            index_elements=[Therapist.source, Therapist.source_id],
+            set_=update_columns,
+        )
+    )
+
+    created = len([item for item in items if item.source_id not in existing_source_ids])
+    updated = len(items) - created
+    return created, updated
 
 
 def build_search_text(item: ScrapedTherapist) -> str:
@@ -243,3 +364,17 @@ def truncate(value: str, max_length: int) -> str:
     if len(clean) <= max_length:
         return clean
     return f"{clean[: max_length - 3]}..."
+
+
+def write_failure_log(rows: list[dict[str, str]]) -> None:
+    if not rows:
+        return
+
+    logs_dir = Path("logs")
+    logs_dir.mkdir(exist_ok=True)
+    path = logs_dir / "scrape_failures.jsonl"
+    with path.open("w", encoding="utf-8") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+    print(f"Saved {len(rows)} failures to {path}")
