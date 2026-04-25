@@ -14,7 +14,7 @@ PsicoFinder is a therapist discovery platform with a React frontend and a FastAP
 
 ## Why this stack
 
-Vercel is a strong fit for the frontend because it is fast, simple, and pairs naturally with a Vite/React app. With your database already on Supabase, the clean split is `Vercel frontend + Railway FastAPI backend + Supabase Postgres`. Railway is the better default than Vercel for the backend because the API and scraper are long-running server workloads and Vercel is less comfortable for Python services that need scheduled jobs, DB connections, and background-like execution.
+Vercel is a strong fit for the frontend because it is fast, simple, and pairs naturally with a Vite/React app. With your database already on Supabase, the clean split is `Vercel frontend + FastAPI backend + Supabase Postgres`. Railway is a solid default for the backend, but Cloud Run is also a good option if you want pay-as-you-go hosting without a fixed monthly bill.
 
 ## Repository layout
 
