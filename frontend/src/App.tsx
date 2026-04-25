@@ -121,7 +121,7 @@ function FacetSearchField({
 
       {selectedOptions.length > 0 ? (
         <div className="selected-facet-row">
-          <span className="selected-facet-label">Selected</span>
+          <span className="selected-facet-label">Selecionado</span>
           {selectedOptions.map((option) => (
             <button
               className="selected-facet-pill"
@@ -130,19 +130,19 @@ function FacetSearchField({
               onClick={() => onRemove(option.value)}
             >
               <span>{option.label}</span>
-              <small>Remove</small>
+              <small>Remover</small>
             </button>
           ))}
           <button className="ghost-button selected-facet-clear" type="button" onClick={onClearAll}>
-            Clear all
+            Limpar tudo
           </button>
         </div>
       ) : null}
 
       <div className="facet-results-box">
         <div className="facet-header">
-          <span>{query.trim() ? 'Matches' : 'Popular'}</span>
-          {loading ? <small className="facet-loading">Loading...</small> : null}
+          <span>{query.trim() ? 'Resultados' : 'Populares'}</span>
+          {loading ? <small className="facet-loading">Carregando...</small> : null}
         </div>
         <div className="pill-grid facet-result-grid">
           {options.length > 0 ? (
@@ -175,16 +175,16 @@ const fallbackTherapists: Therapist[] = [
     slug: 'amanda-silva-sao-paulo',
     full_name: 'Amanda Silva',
     is_clinic: false,
-    headline: 'Psicologa clinica com foco em ansiedade, TCC e atendimentos online.',
-    bio: 'Atendimento com base em escuta ativa, psicoeducacao e planos objetivos para ansiedade, TDAH e estresse.',
-    city: 'Sao Paulo',
+    headline: 'Psicóloga clínica com foco em ansiedade, TCC e atendimentos online.',
+    bio: 'Atendimento com base em escuta ativa, psicoeducação e planos objetivos para ansiedade, TDAH e estresse.',
+    city: 'São Paulo',
     state: 'SP',
     remote_available: true,
     price_min: 180,
     price_max: 220,
     approaches: ['TCC'],
     specialties: ['Ansiedade', 'TDAH'],
-    languages: ['Portuguese'],
+    languages: ['Português'],
     profile_url: '',
     updated_at: new Date().toISOString(),
   },
@@ -194,15 +194,15 @@ const fallbackTherapists: Therapist[] = [
     full_name: 'Bruna Costa',
     is_clinic: false,
     headline: 'Terapia afirmativa para adultos e casais com acolhimento e estrutura.',
-    bio: 'Trabalho voltado para relacoes, autoestima e suporte emocional com uma abordagem acolhedora e pratica.',
+    bio: 'Trabalho voltado para relações, autoestima e suporte emocional com uma abordagem acolhedora e prática.',
     city: 'Belo Horizonte',
     state: 'MG',
     remote_available: true,
     price_min: 150,
     price_max: 180,
     approaches: ['Humanista'],
-    specialties: ['Relacionamentos', 'Depressao'],
-    languages: ['Portuguese', 'English'],
+    specialties: ['Relacionamentos', 'Depressão'],
+    languages: ['Português', 'Inglês'],
     profile_url: '',
     updated_at: new Date().toISOString(),
   },
@@ -211,7 +211,7 @@ const fallbackTherapists: Therapist[] = [
     slug: 'carla-oliveira-curitiba',
     full_name: 'Carla Oliveira',
     is_clinic: false,
-    headline: 'Especialista em autismo, familia e desenvolvimento infantil.',
+    headline: 'Especialista em autismo, família e desenvolvimento infantil.',
     bio: 'Acompanhamento infantil e familiar com foco em desenvolvimento, regulação e suporte aos cuidadores.',
     city: 'Curitiba',
     state: 'PR',
@@ -220,7 +220,7 @@ const fallbackTherapists: Therapist[] = [
     price_max: 260,
     approaches: ['ABA', 'Integrativa'],
     specialties: ['TEA', 'Familia'],
-    languages: ['Portuguese'],
+    languages: ['Português'],
     profile_url: '',
     updated_at: new Date().toISOString(),
   },
@@ -584,23 +584,23 @@ export default function App() {
       <section className="top-summary">
         <div className="top-summary-title">
           <h1>PsicoFinder</h1>
-          <p className="hero-text">National therapist directory scrapped from Doctoralia.</p>
+          <p className="hero-text">Diretório nacional de terapeutas extraído da Doctoralia.</p>
         </div>
 
         <div className="top-summary-stats">
           <div className="summary-stat">
-            <span>Last scrape</span>
+            <span>Última coleta</span>
             <strong>
               {latestScrape?.latest_scraped_at
-                ? new Intl.DateTimeFormat('en-US', {
+                ? new Intl.DateTimeFormat('pt-BR', {
                     dateStyle: 'medium',
                     timeStyle: 'short',
                   }).format(new Date(latestScrape.latest_scraped_at))
-                : 'Pending'}
+                : 'Pendente'}
             </strong>
           </div>
           <div className="summary-stat">
-            <span>Total profiles</span>
+            <span>Total de perfis</span>
             <strong>{totalProfiles}</strong>
           </div>
         </div>
@@ -610,48 +610,48 @@ export default function App() {
         <aside className="filter-panel">
           <div className="panel-header">
             <div>
-              <p className="eyebrow">Filters</p>
-              <h2>Refine results</h2>
+              <p className="eyebrow">Filtros</p>
+              <h2>Refinar resultados</h2>
             </div>
             <div className="panel-actions">
               <button className="ghost-button" type="button" onClick={resetFilters}>
-                Reset
+                Redefinir
               </button>
             </div>
           </div>
 
           <form className="filter-form" onSubmit={handleSearch}>
             <label className="field field-select">
-              <span>Sort</span>
+              <span>Ordenar</span>
               <select value={sort} onChange={(event) => setSort(event.target.value)}>
-                <option value="updated_desc">Recently updated</option>
-                <option value="price_asc">Lowest price</option>
-                <option value="price_desc">Highest price</option>
-                <option value="name_asc">Name A-Z</option>
+                <option value="updated_desc">Atualizados recentemente</option>
+                <option value="price_asc">Menor preço</option>
+                <option value="price_desc">Maior preço</option>
+                <option value="name_asc">Nome A-Z</option>
               </select>
             </label>
 
             <label className="field">
               <span>
                 <Search size={16} />
-                Search
+                Buscar
               </span>
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Anxiety, autism, TDAH..."
+                placeholder="Ansiedade, autismo, TDAH..."
               />
             </label>
 
             <FacetSearchField
-              title="City"
+              title="Cidade"
               icon={<MapPin size={16} />}
               query={cityQuery}
               selectedOptions={cities}
               options={cityOptions}
               loading={false}
-              placeholder="Type a city..."
-              emptyText="Type to search among the city facets."
+              placeholder="Digite uma cidade..."
+              emptyText="Digite para pesquisar entre os filtros de cidade."
               onQueryChange={setCityQuery}
               onToggle={selectCity}
               onRemove={removeCity}
@@ -659,14 +659,14 @@ export default function App() {
             />
 
             <FacetSearchField
-              title="Specialty"
+              title="Especialidade"
               icon={<Search size={16} />}
               query={specialtyQuery}
               selectedOptions={specialties}
               options={specialtyOptions}
               loading={false}
-              placeholder="Type a specialty..."
-              emptyText="Type to search among the specialty facets."
+              placeholder="Digite uma especialidade..."
+              emptyText="Digite para pesquisar entre os filtros de especialidade."
               onQueryChange={setSpecialtyQuery}
               onToggle={selectSpecialty}
               onRemove={removeSpecialty}
@@ -674,14 +674,14 @@ export default function App() {
             />
 
             <FacetSearchField
-              title="Approach"
+              title="Abordagem"
               icon={<SlidersHorizontal size={16} />}
               query={approachQuery}
               selectedOptions={approaches}
               options={approachOptions}
               loading={false}
-              placeholder="Type an approach..."
-              emptyText="Type to search among the approach facets."
+              placeholder="Digite uma abordagem..."
+              emptyText="Digite para pesquisar entre os filtros de abordagem."
               onQueryChange={setApproachQuery}
               onToggle={selectApproach}
               onRemove={removeApproach}
@@ -692,7 +692,7 @@ export default function App() {
               <div className="facet-header">
                 <span>
                   <Languages size={16} />
-                  Language
+                  Idioma
                 </span>
               </div>
               <div className="selected-facet-row">
@@ -701,7 +701,7 @@ export default function App() {
                   type="button"
                   onClick={clearLanguage}
                 >
-                  <span>All</span>
+                  <span>Todos</span>
                   <small>{languageOptions.reduce((total, option) => total + option.count, 0)}</small>
                 </button>
               </div>
@@ -722,18 +722,18 @@ export default function App() {
                     );
                   })
                 ) : (
-                  <p className="facet-empty">No language facets available yet.</p>
+                  <p className="facet-empty">Ainda não há filtros de idioma disponíveis.</p>
                 )}
               </div>
             </section>
 
             <section className="price-range-group">
               <div className="facet-header">
-                <span>Price range</span>
+                <span>Faixa de preço</span>
               </div>
               <div className="price-range-bar">
                 <label className="price-range-end">
-                  <span>Min</span>
+                  <span>Mín.</span>
                   <input
                     value={minPrice}
                     onChange={(event) => setMinPrice(event.target.value)}
@@ -745,7 +745,7 @@ export default function App() {
                 <div className="price-range-divider" aria-hidden="true" />
 
                 <label className="price-range-end">
-                  <span>Max</span>
+                  <span>Máx.</span>
                   <input
                     value={maxPrice}
                     onChange={(event) => setMaxPrice(event.target.value)}
@@ -764,7 +764,7 @@ export default function App() {
               />
               <span>
                 <Video size={16} />
-                Online only
+                Apenas online
               </span>
             </label>
 
@@ -776,13 +776,13 @@ export default function App() {
               />
               <span>
                 <Building2 size={16} />
-                Include clinics
+                Incluir clínicas
               </span>
             </label>
 
             <button className="primary-button" type="submit" disabled={loading}>
               <RefreshCw size={16} className={loading ? 'spin' : ''} />
-              {loading ? 'Searching...' : 'Apply filters'}
+              {loading ? 'Buscando...' : 'Aplicar filtros'}
             </button>
           </form>
         </aside>
@@ -790,18 +790,18 @@ export default function App() {
         <main className="results-panel">
           <section className="results-header results-header-table">
             <div>
-              <p className="eyebrow">Daily Doctoralia Import</p>
-              <h2>Therapists</h2>
+              <p className="eyebrow">Importação diária da Doctoralia</p>
+              <h2>Terapeutas</h2>
             </div>
             <div className="results-metrics">
               <div className="summary-stat summary-stat-compact">
-                <span>Total matches</span>
+                <span>Total de resultados</span>
                 <strong>{total}</strong>
               </div>
               <p className="helper-text">
                 {usingFallback
-                  ? 'Showing sample entries until the FastAPI service is reachable.'
-                  : `Showing page ${page + 1} of ${totalPages} from the daily imported database.`}
+                  ? 'Exibindo exemplos até que o serviço FastAPI esteja disponível.'
+                  : `Exibindo a página ${page + 1} de ${totalPages} do banco importado diariamente.`}
               </p>
             </div>
           </section>
@@ -810,13 +810,13 @@ export default function App() {
             <table className="results-table">
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Location</th>
-                  <th>Specialties</th>
-                  <th>Approach</th>
-                  <th>Languages</th>
-                  <th>Price</th>
-                  <th>Source</th>
+                  <th>Nome</th>
+                  <th>Localização</th>
+                  <th>Especialidades</th>
+                  <th>Abordagem</th>
+                  <th>Idiomas</th>
+                  <th>Preço</th>
+                  <th>Fonte</th>
                 </tr>
               </thead>
               <tbody>
@@ -828,11 +828,11 @@ export default function App() {
                       <td>
                         <div className="table-primary">
                           <strong>{therapist.full_name}</strong>
-                          <span>{therapist.headline ?? 'Profile enrichment in progress.'}</span>
+                          <span>{therapist.headline ?? 'Enriquecimento de perfil em andamento.'}</span>
                           {therapist.is_clinic ? (
                             <span className="badge badge-clinic table-badge-inline">
                               <Building2 size={14} />
-                              Clinic
+                              Clínica
                             </span>
                           ) : null}
                           <button
@@ -840,15 +840,15 @@ export default function App() {
                             type="button"
                             onClick={() => setSpecialtyModalTherapist(therapist)}
                           >
-                            View full profile
+                            Ver perfil completo
                           </button>
                         </div>
                       </td>
-                      <td>{[therapist.city, therapist.state].filter(Boolean).join(', ') || 'Pending'}</td>
+                      <td>{[therapist.city, therapist.state].filter(Boolean).join(', ') || 'Pendente'}</td>
                       <td>
                         <div className="specialty-cell">
                           <span className="specialty-preview">
-                            {therapist.specialties.slice(0, 3).join(', ') || 'Pending'}
+                            {therapist.specialties.slice(0, 3).join(', ') || 'Pendente'}
                             {therapist.specialties.length > 3 ? '...' : ''}
                           </span>
                           {therapist.specialties.length > 3 ? (
@@ -857,7 +857,7 @@ export default function App() {
                               type="button"
                               onClick={() => setSpecialtyModalTherapist(therapist)}
                             >
-                              Open profile
+                              Abrir perfil
                             </button>
                           ) : null}
                         </div>
@@ -865,7 +865,7 @@ export default function App() {
                       <td>
                         <div className="specialty-cell">
                           <span className="specialty-preview">
-                            {therapist.approaches.slice(0, 3).join(', ') || 'Pending'}
+                            {therapist.approaches.slice(0, 3).join(', ') || 'Pendente'}
                             {therapist.approaches.length > 3 ? '...' : ''}
                           </span>
                           {therapist.approaches.length > 3 ? (
@@ -874,16 +874,16 @@ export default function App() {
                               type="button"
                               onClick={() => setSpecialtyModalTherapist(therapist)}
                             >
-                              Open profile
+                              Abrir perfil
                             </button>
                           ) : null}
                         </div>
                       </td>
-                      <td>{therapist.languages.join(', ') || 'Pending'}</td>
+                      <td>{therapist.languages.join(', ') || 'Pendente'}</td>
                       <td>
                         {therapist.price_min
                           ? `R$ ${therapist.price_min}${therapist.price_max ? `-${therapist.price_max}` : ''}`
-                          : 'Pending'}
+                          : 'Pendente'}
                       </td>
                       <td>
                         {hasSourceUrl ? (
@@ -893,10 +893,10 @@ export default function App() {
                             target="_blank"
                             rel="noreferrer"
                           >
-                            View source
+                            Ver fonte
                           </a>
                         ) : (
-                          <span className="table-link table-link-disabled">Unavailable</span>
+                          <span className="table-link table-link-disabled">Indisponível</span>
                         )}
                       </td>
                     </tr>
@@ -913,10 +913,10 @@ export default function App() {
               disabled={loading || page === 0 || usingFallback}
               onClick={() => void fetchTherapists(page - 1)}
             >
-              Previous
+              Anterior
             </button>
             <span className="page-indicator">
-              Page {page + 1} of {totalPages}
+              Página {page + 1} de {totalPages}
             </span>
             <button
               className="secondary-button"
@@ -924,7 +924,7 @@ export default function App() {
               disabled={loading || usingFallback || page + 1 >= totalPages}
               onClick={() => void fetchTherapists(page + 1)}
             >
-              Next
+              Próxima
             </button>
           </section>
         </main>
@@ -945,7 +945,7 @@ export default function App() {
           >
             <div className="modal-header">
               <div>
-                <p className="eyebrow">Full profile</p>
+                <p className="eyebrow">Perfil completo</p>
                 <h3 id="specialty-modal-title">{specialtyModalTherapist.full_name}</h3>
               </div>
               <button
@@ -953,43 +953,43 @@ export default function App() {
                 type="button"
                 onClick={() => setSpecialtyModalTherapist(null)}
               >
-                Close
+                Fechar
               </button>
             </div>
             <section className="modal-profile-grid">
               <div className="modal-profile-block">
-                <span className="selected-facet-label">Overview</span>
+                <span className="selected-facet-label">Visão geral</span>
                 <p className="modal-text">
-                  {specialtyModalTherapist.headline ?? 'Profile enrichment in progress.'}
+                  {specialtyModalTherapist.headline ?? 'Enriquecimento de perfil em andamento.'}
                 </p>
                 <p className="modal-text">
-                  {specialtyModalTherapist.bio ?? 'No biography has been scraped yet for this profile.'}
+                  {specialtyModalTherapist.bio ?? 'Ainda não há biografia coletada para este perfil.'}
                 </p>
               </div>
 
               <div className="modal-profile-block">
-                <span className="selected-facet-label">Details</span>
+                <span className="selected-facet-label">Detalhes</span>
                 <div className="modal-detail-grid">
                   <div className="modal-detail-item">
-                    <strong>Location</strong>
+                    <strong>Localização</strong>
                     <span>
                       {[specialtyModalTherapist.city, specialtyModalTherapist.state]
                         .filter(Boolean)
-                        .join(', ') || 'Pending'}
+                        .join(', ') || 'Pendente'}
                     </span>
                   </div>
                   <div className="modal-detail-item">
-                    <strong>Price</strong>
+                    <strong>Preço</strong>
                     <span>
                       {specialtyModalTherapist.price_min
                         ? `R$ ${specialtyModalTherapist.price_min}${
                             specialtyModalTherapist.price_max ? `-${specialtyModalTherapist.price_max}` : ''
                           }`
-                        : 'Pending'}
+                        : 'Pendente'}
                     </span>
                   </div>
                   <div className="modal-detail-item">
-                    <strong>Website</strong>
+                    <strong>Site</strong>
                     <span>
                       {specialtyModalTherapist.profile_url ? (
                         <a
@@ -998,10 +998,10 @@ export default function App() {
                           target="_blank"
                           rel="noreferrer"
                         >
-                          Open source profile
+                          Abrir perfil de origem
                         </a>
                       ) : (
-                        'Unavailable'
+                        'Indisponível'
                       )}
                     </span>
                   </div>
@@ -1009,7 +1009,7 @@ export default function App() {
               </div>
 
               <div className="modal-profile-block">
-                <span className="selected-facet-label">Specialties</span>
+                <span className="selected-facet-label">Especialidades</span>
                 <div className="modal-pill-grid">
                   {specialtyModalTherapist.specialties.length > 0 ? (
                     specialtyModalTherapist.specialties.map((specialtyItem) => (
@@ -1018,13 +1018,13 @@ export default function App() {
                       </span>
                     ))
                   ) : (
-                    <p className="facet-empty">No specialties available for this profile.</p>
+                    <p className="facet-empty">Nenhuma especialidade disponível para este perfil.</p>
                   )}
                 </div>
               </div>
 
               <div className="modal-profile-block">
-                <span className="selected-facet-label">Approaches</span>
+                <span className="selected-facet-label">Abordagens</span>
                 <div className="modal-pill-grid">
                   {specialtyModalTherapist.approaches.length > 0 ? (
                     specialtyModalTherapist.approaches.map((approachItem) => (
@@ -1033,13 +1033,13 @@ export default function App() {
                       </span>
                     ))
                   ) : (
-                    <p className="facet-empty">No approaches available for this profile.</p>
+                    <p className="facet-empty">Nenhuma abordagem disponível para este perfil.</p>
                   )}
                 </div>
               </div>
 
               <div className="modal-profile-block">
-                <span className="selected-facet-label">Languages</span>
+                <span className="selected-facet-label">Idiomas</span>
                 <div className="modal-pill-grid">
                   {specialtyModalTherapist.languages.length > 0 ? (
                     specialtyModalTherapist.languages.map((languageItem) => (
@@ -1048,15 +1048,15 @@ export default function App() {
                       </span>
                     ))
                   ) : (
-                    <p className="facet-empty">No languages available for this profile.</p>
+                    <p className="facet-empty">Nenhum idioma disponível para este perfil.</p>
                   )}
                 </div>
               </div>
 
               <div className="modal-profile-block">
-                <span className="selected-facet-label">Freshness</span>
+                <span className="selected-facet-label">Atualização</span>
                 <p className="modal-text">
-                  Updated {new Intl.DateTimeFormat('en-US', {
+                  Atualizado em {new Intl.DateTimeFormat('pt-BR', {
                     dateStyle: 'medium',
                     timeStyle: 'short',
                   }).format(new Date(specialtyModalTherapist.updated_at))}

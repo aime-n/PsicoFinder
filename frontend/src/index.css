@@ -810,3 +810,213 @@ select {
     display: none;
   }
 }
+
+:root {
+  color-scheme: dark;
+  color: #e6eefb;
+  background:
+    radial-gradient(circle at top, rgba(18, 30, 48, 0.92), transparent 30%),
+    radial-gradient(circle at 78% 12%, rgba(31, 110, 84, 0.22), transparent 24%),
+    linear-gradient(180deg, #07111d 0%, #08101a 42%, #0a0f16 100%);
+}
+
+body {
+  color: #e6eefb;
+  background:
+    radial-gradient(circle at top, rgba(18, 30, 48, 0.92), transparent 30%),
+    radial-gradient(circle at 78% 12%, rgba(31, 110, 84, 0.22), transparent 24%),
+    linear-gradient(180deg, #07111d 0%, #08101a 42%, #0a0f16 100%);
+}
+
+.top-summary,
+.filter-panel,
+.table-shell {
+  background: rgba(10, 17, 28, 0.82);
+  border-color: rgba(148, 163, 184, 0.14);
+  box-shadow: 0 20px 70px rgba(0, 0, 0, 0.35);
+}
+
+.top-summary {
+  border-bottom-color: rgba(148, 163, 184, 0.14);
+}
+
+.top-summary-title .hero-text,
+.summary-stat span,
+.summary-stat-compact span,
+.helper-text,
+.page-indicator,
+.results-table th,
+.results-table td,
+.field span,
+.toggle span,
+.facet-header span,
+.facet-loading,
+.facet-empty,
+.selected-facet-label,
+.price-range-end span,
+.modal-detail-item strong,
+.modal-text {
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.eyebrow {
+  color: #7ee0c4;
+}
+
+.summary-stat,
+.summary-stat-compact {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.summary-stat strong,
+.summary-stat-compact strong,
+.top-summary-title h1,
+.results-header h2,
+.panel-header h2,
+.modal-header h3,
+.table-primary strong {
+  color: #f8fafc;
+}
+
+.pill-filter,
+.selected-facet-pill,
+.field input,
+.field select,
+.price-range-bar,
+.toggle-card,
+.facet-results-box,
+.modal-profile-block,
+.modal-card,
+.ghost-button,
+.secondary-button {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(148, 163, 184, 0.14);
+  color: #e2e8f0;
+}
+
+.pill-filter small,
+.table-primary span,
+.specialty-preview {
+  color: rgba(226, 232, 240, 0.62);
+}
+
+.pill-filter-active {
+  background: rgba(20, 184, 166, 0.16);
+  border-color: rgba(45, 212, 191, 0.34);
+  color: #9ef2df;
+}
+
+.pill-filter-active small {
+  color: inherit;
+}
+
+.selected-facet-pill {
+  background: rgba(20, 184, 166, 0.14);
+  border-color: rgba(45, 212, 191, 0.26);
+  color: #9ef2df;
+}
+
+.facet-results-box {
+  background: rgba(15, 23, 42, 0.62);
+}
+
+.field input,
+.field select,
+.price-range-end input {
+  color: #f8fafc;
+}
+
+.field input::placeholder,
+.price-range-end input::placeholder {
+  color: rgba(226, 232, 240, 0.42);
+}
+
+.price-range-divider {
+  background: rgba(148, 163, 184, 0.14);
+}
+
+.primary-button {
+  background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);
+  color: #effdfa;
+  box-shadow: 0 18px 40px rgba(15, 118, 110, 0.22);
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.ghost-button:hover {
+  transform: translateY(-1px);
+}
+
+.secondary-button,
+.ghost-button,
+.table-link {
+  color: #9ef2df;
+}
+
+.ghost-button {
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.results-table thead {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.results-table th {
+  color: rgba(226, 232, 240, 0.68);
+}
+
+.results-table td,
+.results-table th {
+  border-bottom-color: rgba(148, 163, 184, 0.12);
+}
+
+.results-table tbody tr:hover {
+  background: rgba(15, 118, 110, 0.1);
+}
+
+.badge {
+  background: rgba(20, 184, 166, 0.14);
+  color: #9ef2df;
+}
+
+.badge-clinic {
+  background: rgba(96, 165, 250, 0.14);
+  color: #bfdbfe;
+}
+
+.table-link-disabled {
+  color: rgba(226, 232, 240, 0.42);
+}
+
+.modal-backdrop {
+  background: rgba(2, 6, 23, 0.7);
+}
+
+.modal-card {
+  background: rgba(7, 12, 20, 0.95);
+  border-color: rgba(148, 163, 184, 0.16);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.modal-profile-block {
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.modal-detail-item a,
+.modal-action-button {
+  color: #9ef2df;
+}
+
+.modal-action-button {
+  background: rgba(20, 184, 166, 0.12);
+  border-color: rgba(45, 212, 191, 0.24);
+}
+
+.modal-action-button:hover {
+  background: rgba(20, 184, 166, 0.18);
+}
+
+.facet-empty {
+  color: rgba(226, 232, 240, 0.54);
+}

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Loader2, ExternalLink, Filter, ArrowUpDown, Check, X } from 'lucide-react';
+import { Search, Loader2, ExternalLink, Filter, ArrowUpDown, Check, X, Sparkles, HeartHandshake, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface Psychologist {
@@ -104,36 +104,75 @@ export default function App() {
     });
   }, [filteredData, sortOrder]);
 
+  const activeFilters = [filterTdah, filterTcc, filterTea].filter(Boolean).length;
+  const hasResults = sortedData.length > 0;
+
   return (
-    <div className="min-h-screen bg-[#F5F5F0] text-[#141414] font-sans p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.82),_transparent_32%),radial-gradient(circle_at_80%_10%,_rgba(167,243,208,0.24),_transparent_26%),radial-gradient(circle_at_bottom_right,_rgba(253,186,116,0.18),_transparent_30%),linear-gradient(180deg,_#f8f4ee_0%,_#f4efe7_46%,_#efe8de_100%)] text-slate-900">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(15,23,42,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(15,23,42,0.028)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(circle_at_center,black,transparent_82%)]" />
+      <div className="pointer-events-none absolute left-[-6rem] top-24 h-72 w-72 rounded-full bg-emerald-200/25 blur-3xl" />
+      <div className="pointer-events-none absolute right-[-5rem] top-[22rem] h-80 w-80 rounded-full bg-amber-200/20 blur-3xl" />
+
+      <div className="relative mx-auto max-w-6xl px-4 py-5 sm:px-6 lg:px-8 lg:py-8">
         {/* Header */}
-        <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <h1 className="text-6xl font-bold tracking-tighter mb-2">PsicoFinder</h1>
-            <p className="text-lg opacity-60 italic font-serif">Ultra-fast Doctoralia psychologist scraper & filter</p>
-          </div>
-          
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] uppercase tracking-widest font-bold opacity-50">Pages to Scrape</label>
-              <input 
-                type="number" 
-                value={pages} 
-                onChange={(e) => setPages(Number(e.target.value))}
-                className="bg-white border border-black/10 rounded-lg px-3 py-2 w-24 focus:outline-none focus:ring-2 focus:ring-black/5"
-                min="1"
-                max="10"
-              />
+        <header className="mb-6 rounded-[2rem] border border-white/60 bg-white/45 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl sm:p-6 lg:mb-8 lg:p-8">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-2xl">
+              <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200/80 bg-emerald-50/90 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.3em] text-emerald-700 shadow-sm">
+                <Sparkles className="h-3.5 w-3.5" />
+                PsicoFinder 2.0
+              </div>
+              <h1 className="max-w-3xl text-5xl font-semibold tracking-[-0.06em] text-slate-950 sm:text-6xl lg:text-7xl">
+                Encontre terapeutas com clareza, acolhimento e menos fricção.
+              </h1>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+                Uma interface mais calma para explorar dados da Doctoralia. Mantemos a estrutura em que você confia, mas com uma experiência mais humana, moderna e fácil de ler.
+              </p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200/90 bg-white/75 px-3 py-2 text-sm font-medium text-slate-700 shadow-sm">
+                  <HeartHandshake className="h-4 w-4 text-emerald-600" />
+                  Descoberta de terapias
+                </div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200/90 bg-white/75 px-3 py-2 text-sm font-medium text-slate-700 shadow-sm">
+                  <ShieldCheck className="h-4 w-4 text-sky-600" />
+                  Filtros precisos
+                </div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200/90 bg-white/75 px-3 py-2 text-sm font-medium text-slate-700 shadow-sm">
+                  <ArrowUpDown className="h-4 w-4 text-amber-600" />
+                  Ordenação por preço
+                </div>
+              </div>
             </div>
-            <button
-              onClick={handleScrape}
-              disabled={loading}
-              className="bg-[#141414] text-white px-8 py-3 rounded-full font-bold flex items-center gap-2 hover:bg-black/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed h-[46px]"
-            >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-              {loading ? 'Scraping...' : 'Start Search'}
-            </button>
+
+            <div className="grid gap-3 sm:grid-cols-2 lg:w-[360px] lg:grid-cols-1">
+              <div className="rounded-2xl border border-white/70 bg-white/80 p-4 shadow-sm backdrop-blur">
+                <label className="mb-2 block text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+                  Páginas para coletar
+                </label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="number"
+                    value={pages}
+                    onChange={(e) => setPages(Number(e.target.value))}
+                    className="h-12 w-28 rounded-xl border border-slate-200 bg-slate-50 px-4 text-lg font-semibold text-slate-900 outline-none transition focus:border-emerald-300 focus:ring-4 focus:ring-emerald-100"
+                    min="1"
+                    max="10"
+                  />
+                  <p className="text-sm leading-5 text-slate-500">
+                    Mais páginas ampliam o alcance, mas a interface continua leve.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={handleScrape}
+                disabled={loading}
+                className="group inline-flex h-14 items-center justify-center gap-2 rounded-2xl bg-slate-950 px-6 font-semibold text-white shadow-[0_18px_40px_rgba(15,23,42,0.22)] transition-all hover:-translate-y-0.5 hover:bg-slate-900 disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:translate-y-0"
+              >
+                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4 transition-transform group-hover:scale-110" />}
+                {loading ? 'Buscando terapeutas...' : 'Iniciar busca'}
+              </button>
+            </div>
           </div>
         </header>
 
@@ -144,29 +183,29 @@ export default function App() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="mb-8 overflow-hidden"
+              className="mb-6 overflow-hidden lg:mb-8"
             >
-              <div className="bg-white rounded-3xl p-6 shadow-sm border border-black/5">
-                <div className="flex justify-between items-end mb-4">
+              <div className="rounded-[2rem] border border-white/70 bg-white/75 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+                <div className="mb-4 flex items-end justify-between gap-6">
                   <div>
-                    <h3 className="text-sm font-bold uppercase tracking-widest opacity-50 mb-1">Scraping Progress</h3>
-                    <p className="text-lg font-bold truncate max-w-md">
-                      {progress.name || 'Fetching doctor list...'}
+                    <h3 className="mb-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-500">Progresso da coleta</h3>
+                    <p className="max-w-md truncate text-lg font-semibold text-slate-900">
+                      {progress.name || 'Buscando lista de profissionais...'}
                     </p>
                   </div>
                   <div className="text-right">
-                    <span className="text-2xl font-mono font-bold">
+                    <span className="text-3xl font-semibold tracking-[-0.04em] text-slate-950">
                       {progress.total > 0 ? Math.round((progress.current / progress.total) * 100) : 0}%
                     </span>
-                    <p className="text-[10px] uppercase tracking-widest font-bold opacity-50">
-                      {progress.current} / {progress.total} Doctors
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">
+                      {progress.current} / {progress.total} profissionais
                     </p>
                   </div>
                 </div>
                 
-                <div className="h-4 bg-[#F5F5F0] rounded-full overflow-hidden relative">
+                <div className="relative h-3 overflow-hidden rounded-full bg-slate-100">
                   <motion.div 
-                    className="h-full bg-[#141414]"
+                    className="h-full rounded-full bg-[linear-gradient(90deg,#0f172a_0%,#0f766e_50%,#14b8a6_100%)]"
                     initial={{ width: 0 }}
                     animate={{ width: `${progress.total > 0 ? (progress.current / progress.total) * 100 : 0}%` }}
                     transition={{ type: 'spring', bounce: 0, duration: 0.5 }}
@@ -178,87 +217,99 @@ export default function App() {
         </AnimatePresence>
 
         {/* Filters */}
-        <div className="bg-white rounded-3xl p-6 mb-8 shadow-sm border border-black/5">
-          <div className="flex flex-col md:flex-row gap-6 items-center">
+        <div className="mb-6 rounded-[2rem] border border-white/70 bg-white/70 p-5 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur-xl lg:mb-8 lg:p-6">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-semibold tracking-[-0.02em] text-slate-900">Refine sua busca</h2>
+              <p className="mt-1 text-sm text-slate-500">
+                Mantemos a mesma lógica, mas deixamos os controles mais claros e convidativos.
+              </p>
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-600">
+              {activeFilters} filtros ativos
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-6 md:flex-row md:items-center">
             <div className="flex-1 w-full">
-              <div className="flex items-center gap-2 mb-2 text-[10px] uppercase tracking-widest font-bold opacity-50">
-                <Filter className="w-3 h-3" />
-                Regex Filter (Optional)
+              <div className="mb-2 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-500">
+                <Filter className="h-3 w-3" />
+                Filtro por regex (opcional)
               </div>
               <input
                 type="text"
-                placeholder="e.g. ^Ana|Maria|.*terapia.*"
+                placeholder="ex.: ^Ana|Maria|.*terapia.*"
                 value={regexFilter}
                 onChange={(e) => setRegexFilter(e.target.value)}
-                className="w-full bg-[#F5F5F0] border-none rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/10 font-mono text-sm"
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 font-mono text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-300 focus:bg-white focus:ring-4 focus:ring-emerald-100"
               />
             </div>
             
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3">
               <button 
                 onClick={() => setFilterTdah(prev => !prev)}
-                className={`flex items-center gap-2 px-4 py-3 rounded-xl transition-all border ${
+                className={`flex items-center gap-2 rounded-2xl border px-4 py-3 transition-all ${
                   filterTdah 
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700 shadow-sm' 
-                    : 'bg-[#F5F5F0] border-transparent hover:bg-black/5'
+                    ? 'border-emerald-200 bg-emerald-50 text-emerald-800 shadow-sm' 
+                    : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-white'
                 }`}
               >
                 <div className={`w-2 h-2 rounded-full ${filterTdah ? 'bg-emerald-500' : 'bg-black/20'}`} />
-                <span className="text-sm font-medium">TDAH Only</span>
+                <span className="text-sm font-medium">Só TDAH</span>
               </button>
 
               <button 
                 onClick={() => setFilterTcc(prev => !prev)}
-                className={`flex items-center gap-2 px-4 py-3 rounded-xl transition-all border ${
+                className={`flex items-center gap-2 rounded-2xl border px-4 py-3 transition-all ${
                   filterTcc 
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700 shadow-sm' 
-                    : 'bg-[#F5F5F0] border-transparent hover:bg-black/5'
+                    ? 'border-emerald-200 bg-emerald-50 text-emerald-800 shadow-sm' 
+                    : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-white'
                 }`}
               >
                 <div className={`w-2 h-2 rounded-full ${filterTcc ? 'bg-emerald-500' : 'bg-black/20'}`} />
-                <span className="text-sm font-medium">TCC Only</span>
+                <span className="text-sm font-medium">Só TCC</span>
               </button>
 
               <button 
                 onClick={() => setFilterTea(prev => !prev)}
-                className={`flex items-center gap-2 px-4 py-3 rounded-xl transition-all border ${
+                className={`flex items-center gap-2 rounded-2xl border px-4 py-3 transition-all ${
                   filterTea 
-                    ? 'bg-emerald-50 border-emerald-200 text-emerald-700 shadow-sm' 
-                    : 'bg-[#F5F5F0] border-transparent hover:bg-black/5'
+                    ? 'border-emerald-200 bg-emerald-50 text-emerald-800 shadow-sm' 
+                    : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-white'
                 }`}
               >
                 <div className={`w-2 h-2 rounded-full ${filterTea ? 'bg-emerald-500' : 'bg-black/20'}`} />
-                <span className="text-sm font-medium">TEA Only</span>
+                <span className="text-sm font-medium">Só TEA</span>
               </button>
 
               <button 
                 onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
-                className="flex items-center gap-2 px-4 py-3 rounded-xl bg-[#F5F5F0] hover:bg-black/5 transition-colors"
+                className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-700 transition-all hover:border-slate-300 hover:bg-white"
               >
-                <ArrowUpDown className="w-4 h-4" />
-                <span className="text-sm font-medium">Price: {sortOrder === 'asc' ? 'Low to High' : 'High to Low'}</span>
+                <ArrowUpDown className="h-4 w-4" />
+                <span className="text-sm font-medium">Preço: {sortOrder === 'asc' ? 'menor para maior' : 'maior para menor'}</span>
               </button>
             </div>
           </div>
         </div>
 
         {/* Results Table */}
-        <div className="bg-white rounded-3xl shadow-sm border border-black/5 overflow-hidden">
+        <div className="overflow-hidden rounded-[2rem] border border-white/70 bg-white/75 shadow-[0_24px_80px_rgba(15,23,42,0.1)] backdrop-blur-xl">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="border-bottom border-black/5 bg-[#F5F5F0]/50">
-                  <th className="px-6 py-4 text-[10px] uppercase tracking-widest font-bold opacity-50">Name</th>
-                  <th className="px-6 py-4 text-[10px] uppercase tracking-widest font-bold opacity-50">Price</th>
-                  <th className="px-6 py-4 text-[10px] uppercase tracking-widest font-bold opacity-50 text-center">TDAH</th>
-                  <th className="px-6 py-4 text-[10px] uppercase tracking-widest font-bold opacity-50 text-center">TCC</th>
-                  <th className="px-6 py-4 text-[10px] uppercase tracking-widest font-bold opacity-50 text-center">TEA</th>
-                  <th className="px-6 py-4 text-[10px] uppercase tracking-widest font-bold opacity-50">Profile</th>
+                <tr className="border-b border-slate-200/80 bg-slate-50/80">
+                  <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">Nome</th>
+                  <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">Preço</th>
+                  <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500 text-center">TDAH</th>
+                  <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500 text-center">TCC</th>
+                  <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500 text-center">TEA</th>
+                  <th className="px-6 py-4 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-500">Perfil</th>
                 </tr>
               </thead>
               <tbody>
                 <AnimatePresence mode="popLayout">
-                  {sortedData.length > 0 ? (
+                  {hasResults ? (
                     sortedData.map((item, idx) => (
                       <motion.tr
                         key={item.url}
@@ -266,38 +317,38 @@ export default function App() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ delay: idx * 0.05 }}
-                        className="group border-b border-black/5 hover:bg-[#F5F5F0]/30 transition-colors"
+                        className="group border-b border-slate-100 transition-colors hover:bg-emerald-50/35"
                       >
-                        <td className="px-6 py-4 font-bold">{item.name}</td>
+                        <td className="px-6 py-4 font-semibold text-slate-900">{item.name}</td>
                         <td className="px-6 py-4">
-                          <span className="font-mono text-lg">
-                            {item.price > 0 ? `R$ ${item.price}` : 'N/A'}
+                          <span className="font-mono text-base font-semibold text-slate-800">
+                            {item.price > 0 ? `R$ ${item.price}` : 's/ preço'}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-center">
                           <div className="flex justify-center">
                             {item.tdah ? (
-                              <div className="bg-emerald-100 text-emerald-700 p-1 rounded-full"><Check className="w-4 h-4" /></div>
+                              <div className="rounded-full bg-emerald-100 p-1.5 text-emerald-700 ring-1 ring-emerald-200"><Check className="w-4 h-4" /></div>
                             ) : (
-                              <div className="bg-red-50 text-red-300 p-1 rounded-full"><X className="w-4 h-4" /></div>
+                              <div className="rounded-full bg-slate-100 p-1.5 text-slate-300 ring-1 ring-slate-200"><X className="w-4 h-4" /></div>
                             )}
                           </div>
                         </td>
                         <td className="px-6 py-4 text-center">
                           <div className="flex justify-center">
                             {item.tcc ? (
-                              <div className="bg-emerald-100 text-emerald-700 p-1 rounded-full"><Check className="w-4 h-4" /></div>
+                              <div className="rounded-full bg-emerald-100 p-1.5 text-emerald-700 ring-1 ring-emerald-200"><Check className="w-4 h-4" /></div>
                             ) : (
-                              <div className="bg-red-50 text-red-300 p-1 rounded-full"><X className="w-4 h-4" /></div>
+                              <div className="rounded-full bg-slate-100 p-1.5 text-slate-300 ring-1 ring-slate-200"><X className="w-4 h-4" /></div>
                             )}
                           </div>
                         </td>
                         <td className="px-6 py-4 text-center">
                           <div className="flex justify-center">
                             {item.tea ? (
-                              <div className="bg-emerald-100 text-emerald-700 p-1 rounded-full"><Check className="w-4 h-4" /></div>
+                              <div className="rounded-full bg-emerald-100 p-1.5 text-emerald-700 ring-1 ring-emerald-200"><Check className="w-4 h-4" /></div>
                             ) : (
-                              <div className="bg-red-50 text-red-300 p-1 rounded-full"><X className="w-4 h-4" /></div>
+                              <div className="rounded-full bg-slate-100 p-1.5 text-slate-300 ring-1 ring-slate-200"><X className="w-4 h-4" /></div>
                             )}
                           </div>
                         </td>
@@ -306,17 +357,26 @@ export default function App() {
                             href={item.url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-sm font-medium opacity-40 group-hover:opacity-100 transition-opacity"
+                            className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-all hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-800"
                           >
-                            View <ExternalLink className="w-3 h-3" />
+                            Ver perfil <ExternalLink className="h-3.5 w-3.5" />
                           </a>
                         </td>
                       </motion.tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={5} className="px-6 py-12 text-center opacity-40 italic">
-                        {loading ? 'Fetching data from Doctoralia...' : 'No results found. Click "Start Search" to begin.'}
+                      <td colSpan={6} className="px-6 py-16 text-center">
+                        <div className="mx-auto max-w-md rounded-[1.75rem] border border-dashed border-slate-200 bg-slate-50/70 px-6 py-10 text-slate-500">
+                          <p className="text-lg font-semibold text-slate-800">
+                            {loading ? 'Buscando dados na Doctoralia...' : 'Nenhum resultado ainda'}
+                          </p>
+                          <p className="mt-2 text-sm leading-6 text-slate-500">
+                            {loading
+                              ? 'A lista vai aparecer aqui assim que a coleta terminar.'
+                              : 'Clique em "Iniciar busca" para começar e trazer os terapeutas para a tabela abaixo.'}
+                          </p>
+                        </div>
                       </td>
                     </tr>
                   )}
@@ -327,9 +387,9 @@ export default function App() {
         </div>
         
         {/* Footer info */}
-        <footer className="mt-8 flex justify-between items-center text-[10px] uppercase tracking-widest font-bold opacity-30">
-          <div>Total Results: {sortedData.length}</div>
-          <div>Doctoralia Scraper v1.0</div>
+        <footer className="mt-6 flex flex-col gap-2 px-1 pb-4 text-[10px] font-semibold uppercase tracking-[0.28em] text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+          <div>Total de resultados: {sortedData.length}</div>
+          <div>Doctoralia Scraper v2.0</div>
         </footer>
       </div>
     </div>
