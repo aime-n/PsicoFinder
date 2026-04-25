@@ -13,8 +13,10 @@ jobs:
         working-directory: backend
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_DIRECT_URL: ${{ secrets.DATABASE_DIRECT_URL }}
       SCRAPER_SOURCE_URL: ${{ secrets.SCRAPER_SOURCE_URL }}
       SCRAPER_USER_AGENT: ${{ secrets.SCRAPER_USER_AGENT }}
+      SCRAPER_MAX_PAGES: ${{ vars.SCRAPER_MAX_PAGES || '2' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
